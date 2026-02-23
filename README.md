@@ -246,6 +246,42 @@ Returns historical trust values captured per round.
 - `client3.py`: honest client.
 - `malicious_client.py`: submits strongly poisoned update (`+ [50, 50, 50]`).
 
+## Results and Analysis
+
+Place your figure files in `docs/images/` using the exact names below.
+
+<figure>
+  <img src="docs/images/trust-evolution.png" alt="Line chart of trust evolution across rounds where client_1 stays at trust 100, client_2 declines from 100 to 60, and malicious_client drops from 80 to 20 by round 3." width="900" />
+  <figcaption>
+    <strong>Trust Evolution Across Rounds.</strong>
+    This plot shows the on-chain trust mechanism differentiating client behavior over time. `client_1` stays at 100, indicating consistently acceptable updates. `client_2` declines from 100 to 60, which reflects intermittent malicious behavior and periodic penalties. `malicious_client` falls quickly from 80 to 20, showing strong enforcement against persistent adversarial updates.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="docs/images/accuracy-comparison.png" alt="Line chart comparing validation accuracy under adversarial attack: Vanilla FL decreases from about 92% to 57%, while Selective Trust FL declines only from about 92% to 85% over ten rounds." width="900" />
+  <figcaption>
+    <strong>Model Accuracy Under Adversarial Attack.</strong>
+    Vanilla federated averaging degrades steadily as poisoned updates influence the global model. Selective Trust FL maintains significantly higher validation accuracy by reducing the impact of low-trust participants. The widening gap between curves across rounds indicates improved robustness of trust-aware aggregation.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="docs/images/gas-cost-comparison.png" alt="Bar chart comparing gas usage per training round: Fully On-Chain uses 1,500,000 gas and Semi-On-Chain uses 120,000 gas, an approximate 87% reduction." width="900" />
+  <figcaption>
+    <strong>Gas Cost: Fully On-Chain vs Semi-On-Chain.</strong>
+    Fully on-chain aggregation consumes much more gas because aggregation logic and data handling are executed in smart contracts. Semi-on-chain FL keeps only trust-critical metadata on-chain while offloading bulk computation, reducing gas from 1,500,000 to 120,000 per round (about 87% lower), which is substantially more cost-efficient.
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="docs/images/latency-comparison.png" alt="Box plot comparing round completion time: Fully On-Chain mean latency is about 12.1 seconds and Semi-On-Chain mean latency is about 3.4 seconds, around 72% lower." width="900" />
+  <figcaption>
+    <strong>Round Completion Latency Comparison.</strong>
+    Fully on-chain training introduces higher round latency due to contract execution and block confirmation waits. Semi-on-chain FL reduces synchronization overhead and shortens round time from a mean of about 12.1s to about 3.4s (roughly 72% reduction), improving training throughput and responsiveness.
+  </figcaption>
+</figure>
+
 ## Notes and Caveats
 
 - `expected_clients` variable exists in server but is not currently enforced.
